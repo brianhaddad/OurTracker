@@ -1,5 +1,7 @@
 ﻿using AODL.Document.Content.Text;
 using AODL.Document.SpreadsheetDocuments;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace TrackerCommon
 {
@@ -37,6 +39,22 @@ namespace TrackerCommon
                     Console.WriteLine();
                 }
             }
+            //TODO: the json serialization fails.
+            //It's not imperative that I get it working though.
+            //Really just curious to see the structure of the document
+            //all in one file. :P
+            var options = new JsonSerializerOptions
+            {
+                WriteIndented = true,
+                IgnoreReadOnlyProperties = true,
+                IgnoreReadOnlyFields = true,
+                ReferenceHandler = ReferenceHandler.Preserve,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                UnknownTypeHandling = JsonUnknownTypeHandling.JsonNode,
+            };
+            var json = JsonSerializer.Serialize(sheetDocument, options);
+            var writePath = @"C:\r\OurTracker\outputTest.txt";
+            File.WriteAllText(writePath, json);
         }
     }
 }
