@@ -8,6 +8,6 @@ do
 } while (!File.Exists(path));
 
 var test = new ODSTools();
-test.ReadOutSpreadsheet(path);
+test.DuplicateSpreadsheet(path);
 
 Console.ReadLine();
