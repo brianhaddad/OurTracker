@@ -13,17 +13,21 @@ namespace TrackerCommon
     {
         public void DuplicateSpreadsheet(string path)
         {
+            //TODO: copy a spreadsheet, clear out the data, add it to the project as a resource,
+            //duplicate it any time I need/want a new sheet.
+            //Might need to keep sample cells in the first row as well.
             var newSheet = new SpreadsheetDocument();
             newSheet.New();
             var newTable = new Table(newSheet, "Sheet1", "ta1");
             var newColumn = new Column(newTable, "co1");
+            newColumn.ColumnStyle.ColumnProperties.Width = "2in";
             newTable.ColumnCollection.Add(newColumn);
             var firstRow = new Row(newTable);
             var secondRow = new Row(newTable);
             newTable.RowCollection.Add(firstRow);
             newTable.RowCollection.Add(secondRow);
             var firstCell = newTable.CreateCell();
-            var firstCellContent = new Paragraph(newSheet);
+            var firstCellContent = new Paragraph(newSheet); //paragraph level can be cloned :)
             var firstCellContentText = new SimpleText(newSheet, "Test");
             firstCellContent.TextContent.Add(firstCellContentText);
             firstCell.Content.Add(firstCellContent);
