@@ -18,14 +18,28 @@ namespace TrackerCommon
             var newTable = new Table(newSheet, "Sheet1", "ta1");
             var newColumn = new Column(newTable, "co1");
             newTable.ColumnCollection.Add(newColumn);
-            var newRow = new Row(newTable);
-            newTable.RowCollection.Add(newRow);
-            var newCell = newTable.CreateCell();
-            var newContent = new Paragraph(newSheet);
-            var newSimpleText = new SimpleText(newSheet, "Test");
-            newContent.TextContent.Add(newSimpleText);
-            newCell.Content.Add(newContent);
-            newTable.InsertCellAt(0, 0, newCell);
+            var firstRow = new Row(newTable);
+            var secondRow = new Row(newTable);
+            newTable.RowCollection.Add(firstRow);
+            newTable.RowCollection.Add(secondRow);
+            var firstCell = newTable.CreateCell();
+            var firstCellContent = new Paragraph(newSheet);
+            var firstCellContentText = new SimpleText(newSheet, "Test");
+            firstCellContent.TextContent.Add(firstCellContentText);
+            firstCell.Content.Add(firstCellContent);
+            var secondCell = newTable.CreateCell();
+            //"Attribute, Name=\"calcext:value-type\", Value=\"date\""
+            var valueTypeAttribute = newSheet.CreateAttribute("value-type", "calcext");
+            valueTypeAttribute.Value = "date";
+            secondCell.Node.Attributes?.SetNamedItem(valueTypeAttribute);
+            secondCell.OfficeValueType = "date";
+            secondCell.OfficeValue = "2022-12-05T16:35:00";
+            var secondCellContent = new Paragraph(newSheet);
+            var secondCellContentText = new SimpleText(newSheet, "12/05/2022 16:35:00");
+            secondCellContent.TextContent.Add(secondCellContentText);
+            secondCell.Content.Add(secondCellContent);
+            newTable.InsertCellAt(0, 0, firstCell);
+            newTable.InsertCellAt(1, 0, secondCell);
             newSheet.TableCollection.Add(newTable);
             var newPath = @"C:\r\OurTracker\testSheet.ods";
             newSheet.SaveTo(newPath);
@@ -44,6 +58,11 @@ namespace TrackerCommon
                     for (var k=0; k<row.CellCollection.Count; k++)
                     {
                         var cell = row.CellCollection[k];
+                        var valueType = cell.OfficeValueType;
+                        if (valueType == "date")
+                        {
+                            Console.Write("*");
+                        }
                         var styles = cell.Style?.PropertyCollection;
                         var formula = cell.Formula;
                         if (!string.IsNullOrEmpty(formula))
