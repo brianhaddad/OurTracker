@@ -3,6 +3,7 @@ using AODL.Document.Content.Text;
 using AODL.Document.SpreadsheetDocuments;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml;
 
 namespace TrackerCommon
 {
@@ -32,12 +33,10 @@ namespace TrackerCommon
             firstCellContent.TextContent.Add(firstCellContentText);
             firstCell.Content.Add(firstCellContent);
             var secondCell = newTable.CreateCell();
-            //"Attribute, Name=\"calcext:value-type\", Value=\"date\""
-            var valueTypeAttribute = newSheet.CreateAttribute("value-type", "calcext");
-            valueTypeAttribute.Value = "date";
-            secondCell.Node.Attributes?.SetNamedItem(valueTypeAttribute);
             secondCell.OfficeValueType = "date";
-            secondCell.OfficeValue = "2022-12-05T16:35:00";
+            var dateValueAttribute = newSheet.CreateAttribute("date-value", "office");
+            dateValueAttribute.Value = "2022-12-05T16:35:00";
+            secondCell.Node.Attributes?.SetNamedItem(dateValueAttribute);
             var secondCellContent = new Paragraph(newSheet);
             var secondCellContentText = new SimpleText(newSheet, "12/05/2022 16:35:00");
             secondCellContent.TextContent.Add(secondCellContentText);
